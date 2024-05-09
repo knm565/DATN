@@ -1,0 +1,9 @@
+-Tìm hiểu thuật toán Decision Tree / done
+-Tìm hiểu các thông số đánh giá hiệu suất mô hình / done
+-Tìm hiểu phương pháp Bagging / done
+-Tìm hiểu thuật toán Random Forest Regression / done
+-Tìm hiểu cách xây dựng mô hình / done
+-Tìm kiếm data để phục vụ training / done
+-Tìm hiểu scikit learn /done
+-Xử lý dữ liệu / working on...
+-Xây dựng mô hình / working on...
