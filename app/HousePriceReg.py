@@ -1,34 +1,32 @@
 import pandas as pd
-from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
+import numpy as np
 
-# Đọc dữ liệu từ file train.csv
-data = pd.read_csv("train.csv")
+# Đọc dữ liệu từ file train.csv và test.csv
+train_data = pd.read_csv('data/train.csv')
+test_data = pd.read_csv('data/test.csv')
 
-# Loại bỏ cột Id vì nó không mang lại ý nghĩa trong việc dự đoán
-data.drop('Id', axis=1, inplace=True)
-
-# Loại bỏ các dòng có giá trị bị thiếu trong cột SalePrice
-data.dropna(subset=['SalePrice'], inplace=True)
-
-# Chuyển đổi các biến phân loại sang biến mã hóa one-hot
+# Tiền xử lý dữ liệu
+# Chuyển đổi dữ liệu không phải số sang số bằng cách áp dụng dummies
 data = pd.get_dummies(data)
 
-# Chia dữ liệu thành features (X) và target (y)
-X = data.drop('SalePrice', axis=1)
-y = data['SalePrice']
+# Tách các features và target từ tập huấn luyện
+X_train = train_data.drop(columns=['SalePrice'])
+y_train = train_data['SalePrice']
 
-# Chia dữ liệu thành tập huấn luyện và tập kiểm tra
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Các features của tập kiểm tra
+X_test = test_data.copy()  # Không có cột 'SalePrice' trong tập kiểm tra
 
-# Khởi tạo và huấn luyện mô hình RandomForestRegressor
-rf_regressor = RandomForestRegressor(n_estimators=100, random_state=42)
-rf_regressor.fit(X_train, y_train)
+# Khởi tạo Random Forest Regressor
+rf = RandomForestRegressor(n_estimators=100, random_state=42)
 
-# Dự đoán trên tập kiểm tra
-predictions = rf_regressor.predict(X_test)
+# Huấn luyện mô hình trên tập dữ liệu train
+rf.fit(X_train, y_train)
+# Dự đoán giá nhà trên tập dữ liệu test
+y_pred = rf.predict(X_test)
 
-# Đánh giá mô hình bằng mean squared error
-mse = mean_squared_error(y_test, predictions)
-print("Mean Squared Error:", mse)
+# Tính toán sai số bình phương trung bình
+mse = mean_squared_error(y_test, y_pred)
+print(f'Mean Squared Error: {mse}')
